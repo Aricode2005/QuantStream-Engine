@@ -172,6 +172,3 @@ trading_backtester/
 
 Full mathematical formulations for each strategy and diagnostic are covered in the accompanying architecture report.
 
-## License
-
-Add your project's license here.
