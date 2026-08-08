@@ -1,4 +1,4 @@
-# Trading Backtester — Modular Edition
+# QuantSteam-Trading Backtester
 
 This is a refactor of the original single-file `server.cpp` into a
 multi-file, pattern-driven C++ project. **Behavior is unchanged** —
