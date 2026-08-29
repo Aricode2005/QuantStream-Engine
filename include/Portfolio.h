@@ -1,7 +1,7 @@
 #pragma once
 class Portfolio {
 public:
-    explicit Portfolio(double initialCash);
+    Portfolio(double initialCash);
 
     bool buyAsset(double currentPrice, int orderQuantity);
 
