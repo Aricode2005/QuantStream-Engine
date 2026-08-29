@@ -1,0 +1,22 @@
+# CMake
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.lib
+*.a
+
+# Data
+*.csv
+
+# Python environments
+__pycache__/
+*.pyc

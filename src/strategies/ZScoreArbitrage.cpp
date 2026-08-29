@@ -38,6 +38,3 @@ std::string ZScoreArbitrage::generateSignal(const Tick& currentTick, Portfolio& 
     return "HOLD";
 }
 
-REGISTER_STRATEGY("ZSCORE", [](const nlohmann::json& p) -> std::unique_ptr<Strategy> {
-    return std::make_unique<ZScoreArbitrage>(p.value("fast_sma", 20), 2.0);
-});

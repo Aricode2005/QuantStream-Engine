@@ -53,15 +53,10 @@ nlohmann::json BacktestEngine::run(const nlohmann::json& marketData) {
     double hurstExponent = StatsUtils::calculateHurstExponent(historicalPrices);
     StatsUtils::HurstResult hurst = StatsUtils::interpretHurst(hurstExponent);
 
-    double kellyFraction = StatsUtils::calculateKellyFraction(portfolio_);
-    StatsUtils::KellyResult kelly = StatsUtils::interpretKelly(kellyFraction);
-
     result["final_value"] = portfolio_.getTotalPortfolioValue(historicalPrices.back());
     result["total_trades"] = totalExecutedTrades;
     result["hurst_exponent"] = hurst.exponent;
-    result["kelly_fraction"] = kelly.fraction;
     result["hurst_msg"] = hurst.message;
-    result["kelly_msg"] = kelly.message;
 
     return result;
 }

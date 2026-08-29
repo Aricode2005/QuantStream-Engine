@@ -1,10 +1,11 @@
 #include "strategies/SMACrossover.h"
 #include "StrategyFactory.h"
+using namespace std;
 
 SMACrossover::SMACrossover(int fastWindow, int slowWindow)
     : fastWindow_(fastWindow), slowWindow_(slowWindow) {}
 
-std::string SMACrossover::generateSignal(const Tick& currentTick, Portfolio& userPortfolio, double riskPct) {
+string SMACrossover::generateSignal(const Tick& currentTick, Portfolio& userPortfolio, double riskPct) {
     priceHistory_.push_back(currentTick.close);
     int n = static_cast<int>(priceHistory_.size());
     if (n < slowWindow_) return "HOLD";
@@ -31,9 +32,3 @@ std::string SMACrossover::generateSignal(const Tick& currentTick, Portfolio& use
     return "HOLD";
 }
 
-// This is also the fallback strategy used by StrategyFactory::create()
-// whenever an unrecognized strat_type is supplied, matching the
-// original server's default behavior.
-REGISTER_STRATEGY("SMA", [](const nlohmann::json& p) -> std::unique_ptr<Strategy> {
-    return std::make_unique<SMACrossover>(p.value("fast_sma", 10), p.value("slow_sma", 50));
-});

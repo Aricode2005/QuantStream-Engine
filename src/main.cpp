@@ -10,11 +10,7 @@
 
 using json = nlohmann::json;
 
-// The only file in the project that knows about HTTP. It parses the
-// request, delegates strategy construction to StrategyFactory and the
-// simulation itself to BacktestEngine, and serializes the response.
-// All trading/statistical logic lives elsewhere and is reachable
-// without this file at all.
+
 int main() {
     httplib::Server backtestServer;
 
@@ -29,15 +25,28 @@ int main() {
         try {
             auto requestJson = json::parse(request.body);
 
-            double riskPct = requestJson.value("risk_pct", 0.10);
-            double startingCash = requestJson.at("start_cash");
-            std::string strategyName = requestJson.value("strat_type", "SMA");
+        double riskPct = requestJson.value("risk_pct", 0.10);
+        double startingCash = requestJson.at("start_cash");
+        std::string strategyName = requestJson.value("strat_type", "SMA");
 
-            std::unique_ptr<Strategy> strategy = StrategyFactory::create(strategyName, requestJson);
-            BacktestEngine engine(std::move(strategy), startingCash, riskPct);
+        std::unique_ptr<StrategyCreator> creator;
+        if (strategyName == "EMA") {
+            creator = std::make_unique<EMACreator>();
+        } else if (strategyName == "BBAND") {
+            creator = std::make_unique<BollingerBandsCreator>();
+        } else if (strategyName == "RSI") {
+            creator = std::make_unique<RSICreator>();
+        } else if (strategyName == "ZSCORE") {
+            creator = std::make_unique<ZScoreCreator>();
+        } else {
+            creator = std::make_unique<SMACreator>();
+        }
 
-            json result = engine.run(requestJson.at("market_data"));
-            response.set_content(result.dump(), "application/json");
+        std::unique_ptr<Strategy> strategy = creator->createStrategy(requestJson);
+        BacktestEngine engine(std::move(strategy), startingCash, riskPct);
+
+        json result = engine.run(requestJson.at("market_data"));
+        response.set_content(result.dump(), "application/json");
 
         } catch (const json::exception& e) {
             std::cerr << "JSON Error: " << e.what() << std::endl;

@@ -33,29 +33,4 @@ HurstResult interpretHurst(double hurstExponent) {
     return {hurstExponent, "Market is Random. No statistical edge based on market regime. Trading is highly risky."};
 }
 
-double calculateKellyFraction(const Portfolio& portfolio) {
-    int totalClosedTrades = portfolio.getWinningTrades() + portfolio.getLosingTrades();
-    if (totalClosedTrades == 0) return 0.0;
-
-    double winRateProbability = static_cast<double>(portfolio.getWinningTrades()) / totalClosedTrades;
-    double averageWin = portfolio.getWinningTrades() > 0
-        ? portfolio.getSumWinningPnL() / portfolio.getWinningTrades()
-        : 0.0;
-    double averageLoss = portfolio.getLosingTrades() > 0
-        ? portfolio.getSumLosingPnL() / portfolio.getLosingTrades()
-        : 1.0;
-    double winLossRatio = (averageLoss > 0) ? (averageWin / averageLoss) : 1.0;
-
-    return winRateProbability - ((1.0 - winRateProbability) / winLossRatio);
 }
-
-KellyResult interpretKelly(double kellyFraction) {
-    if (kellyFraction > 0) {
-        double halfKellyPct = std::round((kellyFraction / 2.0) * 10000.0) / 100.0;
-        return {kellyFraction,
-                "Positive Edge. Suggested max risk per trade (Half-Kelly): " + std::to_string(halfKellyPct) + "%"};
-    }
-    return {kellyFraction, "Negative Edge. The math strongly advises against deploying this strategy."};
-}
-
-}  // namespace StatsUtils

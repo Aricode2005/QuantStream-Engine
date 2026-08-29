@@ -39,6 +39,3 @@ std::string BollingerBands::generateSignal(const Tick& currentTick, Portfolio& u
     return "HOLD";
 }
 
-REGISTER_STRATEGY("BBAND", [](const nlohmann::json& p) -> std::unique_ptr<Strategy> {
-    return std::make_unique<BollingerBands>(p.value("fast_sma", 20), 2.0);
-});

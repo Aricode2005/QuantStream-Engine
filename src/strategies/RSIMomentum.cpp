@@ -42,6 +42,4 @@ std::string RSIMomentum::generateSignal(const Tick& currentTick, Portfolio& user
     return "HOLD";
 }
 
-REGISTER_STRATEGY("RSI", [](const nlohmann::json& p) -> std::unique_ptr<Strategy> {
-    return std::make_unique<RSIMomentum>(p.value("fast_sma", 14));
-});
+

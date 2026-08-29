@@ -1,10 +1,11 @@
 #include "strategies/EMACrossover.h"
 #include "StrategyFactory.h"
+using namespace std;
 
 EMACrossover::EMACrossover(int fastWindow, int slowWindow)
     : fastWindow_(fastWindow), slowWindow_(slowWindow) {}
 
-std::string EMACrossover::generateSignal(const Tick& currentTick, Portfolio& userPortfolio, double riskPct) {
+string EMACrossover::generateSignal(const Tick& currentTick, Portfolio& userPortfolio, double riskPct) {
     ticks_++;
     double fastAlpha = 2.0 / (fastWindow_ + 1);
     double slowAlpha = 2.0 / (slowWindow_ + 1);
@@ -34,6 +35,4 @@ std::string EMACrossover::generateSignal(const Tick& currentTick, Portfolio& use
     return "HOLD";
 }
 
-REGISTER_STRATEGY("EMA", [](const nlohmann::json& p) -> std::unique_ptr<Strategy> {
-    return std::make_unique<EMACrossover>(p.value("fast_sma", 10), p.value("slow_sma", 50));
-});
+

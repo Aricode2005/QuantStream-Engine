@@ -6,7 +6,9 @@ Portfolio::Portfolio(double initialCash)
 
 bool Portfolio::buyAsset(double currentPrice, int orderQuantity) {
     if (availableCash_ >= currentPrice * orderQuantity) {
-        averageEntryPrice_ = currentPrice;
+        double totalCostBefore = averageEntryPrice_ * assetQuantity_;
+        double totalCostNow= currentPrice * orderQuantity;
+        averageEntryPrice_ = (totalCostBefore + totalCostNow) / (assetQuantity_ + orderQuantity);
         availableCash_ -= currentPrice * orderQuantity;
         assetQuantity_ += orderQuantity;
         return true;
